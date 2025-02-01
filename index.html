@@ -23,7 +23,7 @@
         }
 
         /* Love Letter */
-        .love-letter {
+        .love-letter, .hooray-message {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -43,6 +43,18 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+        }
+
+        .hooray-message {
+            font-size: 40px;
+            font-weight: bold;
+            color: red;
+        }
+
+        .hooray-subtext {
+            font-size: 20px;
+            color: black;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -80,10 +92,21 @@
     <div class="love-letter" id="letter">
         <h2>To My Perfect Girl ❤️</h2>
         <p>Will You Be My Valentine?? There is no one else I want to spend my life with 💕</p>
-        <button onclick="this.parentElement.style.display='none'">YES</button>
+        <button onclick="showHoorayMessage()">YES</button>
+    </div>
+
+    <!-- Hooray Message -->
+    <div class="hooray-message" id="hooray">
+        🎉 HOORAY! 🎉
+        <p class="hooray-subtext" id="hooray-text">I wish i could kiss the shit out of you rn but i guess that has to wait a month</p>
     </div>
 
     <script>
+        function showHoorayMessage() {
+            document.getElementById("letter").style.display = "none";
+            document.getElementById("hooray").style.display = "block";
+        }
+
         setTimeout(() => {
             document.getElementById("letter").style.display = "block";
         }, 3000);
