@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #ffdde1;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Falling Hearts */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
+            opacity: 0.7;
+        }
+
+        /* Love Letter */
+        .love-letter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .love-letter button {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Fireworks Canvas -->
+    <canvas id="fireworks"></canvas>
+
+    <!-- Falling Hearts -->
+    <script>
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            document.body.appendChild(heart);
+            
+            let startPosX = Math.random() * window.innerWidth;
+            heart.style.left = `${startPosX}px`;
+            heart.style.top = `-20px`;
+            
+            let animation = heart.animate([
+                { transform: `translateY(0px) scale(1)` },
+                { transform: `translateY(${window.innerHeight + 50}px) scale(0.5)` }
+            ], {
+                duration: 5000 + Math.random() * 3000,
+                easing: "linear"
+            });
+
+            animation.onfinish = () => heart.remove();
+        }
+
+        setInterval(createHeart, 200);
+    </script>
+
+    <!-- Love Letter -->
+    <div class="love-letter" id="letter">
+        <h2>To The Most Perfect and Precious Girl in The World ❤️</h2>
+        <p>Will You Be My Valentine?? There is No One Else I Want to Spend my Life With 💕</p>
+        <button onclick="this.parentElement.style.display='none'">Close</button>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById("letter").style.display = "block";
+        }, 3000);
+    </script>
+
+    <!-- Fireworks Effect -->
+    <script>
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function randomColor() {
+            return `hsl(${Math.random() * 360}, 100%, 60%)`;
+        }
+
+        function Firework(x, y) {
+            this.x = x;
+            this.y = y;
+            this.radius = Math.random() * 3 + 1;
+            this.color = randomColor();
+            this.speed = Math.random() * 2 + 1;
+            this.angle = Math.random() * 2 * Math.PI;
+            this.vx = Math.cos(this.angle) * this.speed;
+            this.vy = Math.sin(this.angle) * this.speed;
+            this.alpha = 1;
+        }
+
+        Firework.prototype.update = function () {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.alpha -= 0.02;
+        };
+
+        function explode(x, y) {
+            let particles = [];
+            for (let i = 0; i < 30; i++) {
+                particles.push(new Firework(x, y));
+            }
+            return particles;
+        }
+
+        let fireworks = [];
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            fireworks = fireworks.filter(firework => firework.alpha > 0);
+            fireworks.forEach(firework => {
+                firework.update();
+                ctx.globalAlpha = firework.alpha;
+                ctx.fillStyle = firework.color;
+                ctx.beginPath();
+                ctx.arc(firework.x, firework.y, firework.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        setInterval(() => {
+            let x = Math.random() * canvas.width;
+            let y = Math.random() * canvas.height / 2;
+            fireworks.push(...explode(x, y));
+        }, 800);
+    </script>
+</body>
+</html>
